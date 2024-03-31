@@ -4,59 +4,24 @@ Visualizing RollerCoasters created in Roller Coaster Tycoon 2 as a simulation.
 
 ## Description
 
-Description...
+Unity Project to import roller coasters from Roller Coaster Tycoon 2. Has 2 different methods of accessing track unit data. Any .txt file with the correct format can be used to create and simulate the roller coaster. After running, the simulation generates "anticipation data" from every track piece - based on the user experience.
 
 ## Getting Started
 
-### Dependencies
+After cloning the project, edit which script you want to run by commenting out the code from File Reader script.
 
-* Describe any prerequisites, libraries, OS version, etc., needed before installing program.
-* ex. Windows 10
+### Details
 
-### Installing
+Unity splines are used to create the roller coaster.
 
-* How/where to download your program
-* Any modifications needed to be made to files/folders
 
-### Executing program
+### Specifics To Edit
 
-* How to run the program
-* Step-by-step bullets
+Modifiers can be changed to make it more similar to RCT2 in SplineCreator.cs in AdjustCoordinatesV2 function.
 ```
-code blocks for commands
+ xModifier = 20;
+ yModifier = 5f;
+ zModifier= 20;
 ```
 
-## Help
-
-Any advise for common problems or issues.
-```
-command to run if program contains helper info
-```
-
-## Authors
-
-Contributors names and contact info
-
-ex. Dominique Pizzie  
-ex. [@DomPizzie](https://twitter.com/dompizzie)
-
-## Version History
-
-* 0.2
-    * Various bug fixes and optimizations
-    * See [commit change]() or See [release history]()
-* 0.1
-    * Initial Release
-
-## License
-
-This project is licensed under the [NAME HERE] License - see the LICENSE.md file for details
-
-## Acknowledgments
-
-Inspiration, code snippets, etc.
-* [awesome-readme](https://github.com/matiassingers/awesome-readme)
-* [PurpleBooth](https://gist.github.com/PurpleBooth/109311bb0361f32d87a2)
-* [dbader](https://github.com/dbader/readme-template)
-* [zenorocha](https://gist.github.com/zenorocha/4526327)
-* [fvcproductions](https://gist.github.com/fvcproductions/1bfc2d4aecb01a834b46)
+To change the version used, comment every V2 method and remove comments from V1 methods, including the input files.
