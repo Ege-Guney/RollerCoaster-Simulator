@@ -1,4 +1,4 @@
-# ROLLER COASTER VISULIZER
+# ROLLER COASTER VISUALIZER
 
 Visualizing RollerCoasters created in Roller Coaster Tycoon 2 as a simulation.
 
