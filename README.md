@@ -9,15 +9,18 @@ Unity Project to import roller coasters from Roller Coaster Tycoon 2. Has 2 diff
 ## Getting Started
 
 After cloning the project, edit which script you want to run by commenting out the code from File Reader script.
+Then run the simulation with Unity Play button to see the results.
 
-### Details
+### Dependencies
 
-Unity splines are used to create the roller coaster.
+- Install Unity Version (2022.3.9) for best results.
+- Import Unity Splines https://docs.unity3d.com/Packages/com.unity.splines@2.2/manual/index.html
 
 
 ### Specifics To Edit
 
 Modifiers can be changed to make it more similar to RCT2 in SplineCreator.cs in AdjustCoordinatesV2 function.
+
 ```
  xModifier = 20;
  yModifier = 5f;
