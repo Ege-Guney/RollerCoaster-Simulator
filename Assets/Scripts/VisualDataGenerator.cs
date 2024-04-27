@@ -20,8 +20,10 @@ public class VisualDataGenerator : MonoBehaviour
     Camera cam;
     GameObject splineObject;
     bool dataSent;
-    Dictionary<Vector3, int> results;
+    Dictionary<Vector3, List<Vector3>> results;
+
     
+    Transform closestTrackUnit;
     bool dataAcquired = false;
     int cur_index = 0;
     public void findContainer(){
@@ -40,23 +42,20 @@ public class VisualDataGenerator : MonoBehaviour
     //same methods in Playcoaster
     private void setClosestLocationIndex(){
         //Vector3 futurePos = target.EvaluatePosition(splinePath, t + futureAdjuster);
-        //figure out the closest knot index!
-        Vector3 futurePos = transform.position;
-        if(cur_index + 1 < locationList.Count){
-            DataPoint<float4> unit1 = locationList[cur_index];
-            DataPoint<float4> unit2 = locationList[cur_index + 1];
-            Vector3 v1 = new Vector3(unit1.Value.x, unit1.Value.y, unit1.Value.z);
-            Vector3 v2 = new Vector3(unit2.Value.x, unit2.Value.y, unit2.Value.z);
-            if(Vector3.Distance(v2, futurePos) <= Vector3.Distance(v1,futurePos)){
-                cur_index++;
-                dataAcquired = false;
+        //figure out the closest knot index
+        float res_pos = 1000000;     
+        foreach(Transform child in splineObject.transform){
+            float temp = Vector3.Distance(transform.position, child.position);
+            if(temp < res_pos){
+                res_pos = temp;
+                closestTrackUnit = child;
             }
         }
-        //Debug.Log("INDEX: " + cur_index);
     }
 
-    int findAnticipationData(){
-        int result = 0;
+    List<Vector3> findAnticipationData(){
+        //int result = 0;
+        List<Vector3> res = new List<Vector3>();
         foreach(Transform child in splineObject.transform){
             //check if point is in sight
             Vector3 vpPos = cam.WorldToViewportPoint(child.position);
@@ -67,10 +66,10 @@ public class VisualDataGenerator : MonoBehaviour
                         continue;
                     }
                 }
-                result++;
+                res.Add(child.position);
             }
         }
-        return result;
+        return res;
     }
     // Start is called before the first frame update
     void Start()
@@ -81,7 +80,7 @@ public class VisualDataGenerator : MonoBehaviour
         getSplinePath();
         locationList = getLocationData();
         dataAcquired = false;
-        results = new Dictionary<Vector3, int>();
+        results = new Dictionary<Vector3, List<Vector3>>();
         dataSent = false;
         splineObject = GameObject.Find("SplineTrack");
     }
@@ -89,22 +88,20 @@ public class VisualDataGenerator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-            if(cur_index < spline.Count - 1){
-                setClosestLocationIndex();
-                if(!dataAcquired){
-                    int res = findAnticipationData();
-                    //write to file...
-                    Debug.Log("Writing..." + res);
-                    results.Add(this.transform.position, res);
-                    dataAcquired = true;
-                }
-            }
+        setClosestLocationIndex();
+        if(!results.ContainsKey(closestTrackUnit.position)){
+            List<Vector3> res = findAnticipationData();
+            //write to file...
+            Debug.Log("Writing..." + res);
+            results.Add(closestTrackUnit.position, res);
+            dataAcquired = true;
+        }    
     }
 
     void OnApplicationQuit()//Now that we are quiting the application we can write our data to a file
     {
         FileWriter fw = GameObject.Find("SplineSpawner").GetComponent<FileWriter>();
         fw.writeDataToFile(results);
+        fw.writeDataToFile2(results);
     }
 }

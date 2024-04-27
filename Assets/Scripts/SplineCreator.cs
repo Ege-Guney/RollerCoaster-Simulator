@@ -118,6 +118,7 @@ public class SplineCreator : MonoBehaviour
             
         } 
         else{
+            loopParser = 0;
             turnParser = 0;
             adjustCoordinateValuesV2(tIn);
         } 
@@ -316,6 +317,9 @@ public class SplineCreator : MonoBehaviour
     private void createNormalKnotV2(TrackUnit.Track trackUnit){
         //TODO: FIX
         BezierKnot knot = new BezierKnot(trackUnit.AdjustedCoordinates);
+        if(trackUnit.TrackType.Contains("LOOP")){
+            knot.Rotation = new Quaternion(0,0,0,0);
+        }
         //knot.Rotation = knot.Rotation * checkForBank(trackUnit,knot);
         spline.Add(knot, TangentMode.Continuous);
     }
@@ -420,7 +424,7 @@ public class SplineCreator : MonoBehaviour
         
         fixBanks();
         spline.SetTangentMode(r, TangentMode.AutoSmooth);
-
+        fixBanks();
         //Debug.Log("Track instantiation starting...");
         SplineInstantiate si = splineObject.AddComponent<SplineInstantiate>();
         
